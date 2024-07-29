@@ -1,0 +1,54 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+    restart: on-failure
+
+  db:
+    image: postgres:16.3-alpine3.20
+    restart: always
+    hostname: localhost
+    environment:
+      POSTGRES_DB: microservices
+      POSTGRES_USER: dmn
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+
+  adminer:
+    image: adminer
+    restart: on-failure
+    ports:
+      - 8080:8080
+
+  app:
+    build: ./app
+    restart: unless-stopped
+    environment:
+      PG_HOST: ${PG_HOST}
+      PG_PORT: ${PG_PORT}
+      PG_USER: ${PG_USER}
+      PG_PWD: ${PG_PWD}
+      PG_NAME: ${PG_NAME}
+      RMQ_HOST: ${RMQ_HOST}
+      RMQ_PORT: ${RMQ_PORT}
+      RMQ_PWD: ${RMQ_PWD}
+      RMQ_USER: ${RMQ_USER}
+    ports:
+      - 3000:3000
+
+  auth:
+    build: ./auth
+    restart: unless-stopped
+    environment:
+      PG_HOST: ${PG_HOST}
+      PG_PORT: ${PG_PORT}
+      PG_USER: ${PG_USER}
+      PG_PWD: ${PG_PWD}
+      PG_NAME: ${PG_NAME}
+      RMQ_HOST: ${RMQ_HOST}
+      RMQ_PORT: ${RMQ_PORT}
+      RMQ_PWD: ${RMQ_PWD}
+      RMQ_USER: ${RMQ_USER}
