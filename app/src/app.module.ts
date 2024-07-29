@@ -22,7 +22,7 @@ import { AuthController } from './app.contoller';
         name: 'AUTH_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: [`amqp://${process.env.RMQ_USER}:${process.env.RMQ_PWD}@${process.env.RMQ_HOST}:${process.env.RMQ_PORT}`],
+          urls: [`amqp://${process.env.RMQ_HOST}:${process.env.RMQ_PORT}`],
           queue: 'auth_queue',
           queueOptions: {
             durable: false
